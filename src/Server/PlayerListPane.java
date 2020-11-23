@@ -16,6 +16,11 @@ public class PlayerListPane extends JPanel {
         add(new JButton("Make host"));
     }
 
-    public void removePeople() {
+    public void removePeople(int index) {
+        int startingPoint = index * 3;
+
+        remove(startingPoint);
+        remove(startingPoint + 1);
+        remove(startingPoint + 2);
     }
 }

@@ -13,5 +13,6 @@ public class ScrollingTextPanel extends JPanel {
 //        message.setOpaque(true);
 
         add(new JLabel(message));
+        revalidate();
     }
 }

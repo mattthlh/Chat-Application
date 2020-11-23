@@ -18,6 +18,7 @@ public class Main {
     static JFrame frame;
     static Socket clientSocket;
     static PrintWriter out;
+    static ReceivingServerMessages receivingServerMessages;
 
     public static void main(String[] args) throws IOException {
         // Initialize Panels
@@ -55,6 +56,10 @@ public class Main {
         components.add(chatPanel);
 
         frame.revalidate();
+        frame.repaint();
+
+        System.out.println(name);
+        sendMessage(name);
 
         sendMessage(name + " has joined the lobby.");
 
@@ -62,16 +67,34 @@ public class Main {
         System.out.println("Logged in");
     }
 
-    public static void connectSocket(String address) throws IOException {
-        clientSocket = new Socket();
-        clientSocket.connect(new InetSocketAddress(address, 5000));
+    public static void leave() throws IOException {
+        sendMessage("left");
+
+        clientSocket.close();
+
+        components.add(loginPanel);
+        components.remove(scrollPane);
+        components.remove(chatPanel);
+
+        frame.repaint();
+        frame.revalidate();
     }
 
-    // TODO: Change addNewMessage to send message to everyone.
+    public static void connectSocket(String address) throws IOException {
+
+        System.out.println("Address: " + address);
+        clientSocket = new Socket();
+        clientSocket.connect(new InetSocketAddress(address, 5000));
+
+        System.out.println("Did connect?");
+
+        receivingServerMessages = new ReceivingServerMessages(clientSocket, scrollingTextPanel);
+        receivingServerMessages.start();
+    }
+
     public static void sendMessage(String message) throws IOException {
         out = new PrintWriter(clientSocket.getOutputStream());
 
-        System.out.println("Test 1");
         out.println(message);
         out.flush();
     }

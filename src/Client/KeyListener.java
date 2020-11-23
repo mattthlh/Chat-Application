@@ -23,6 +23,15 @@ public class KeyListener implements java.awt.event.KeyListener {
 
         // Checks if the user clicked enter
         if(e.getKeyChar() == enterChar) {
+            if(currentText.getText().equalsIgnoreCase("/leave")) {
+                try {
+                    Main.sendMessage(name + " has left the chat.");
+                    Main.leave();
+                    return;
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
             // TODO: Check if the line contains at least one character
             try {
                 Main.sendMessage(message);
